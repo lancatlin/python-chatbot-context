@@ -1,18 +1,13 @@
-from dotenv import load_dotenv
-import os
-
 from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from linebot import LineBotApi, WebhookHandler
 from linebot.models.events import MessageEvent
 from linebot.models.messages import TextMessage
-from linebot.models.send_messages import TextSendMessage
 
-load_dotenv()
+from .line import handler, reply_text, get_msg
+from .message_queue import MessageQueue
+from .guess import Guess
 
-line_bot_api = LineBotApi(os.getenv('LINE_TOKEN'))
-handler = WebhookHandler(os.getenv('LINE_SECRET'))
 
 @csrf_exempt
 def endpoint(request):
@@ -23,13 +18,14 @@ def endpoint(request):
 
     return HttpResponse()
 
-def reply_text(event, *messages, **kwargs):
-    line_bot_api.reply_message(
-        event.reply_token,
-        messages=[TextSendMessage(text=message, **kwargs)
-                  for message in messages],
-    )
 
 @handler.add(MessageEvent, message=TextMessage)
 def route(event):
-    reply_text(event, 'hello') 
+    if MessageQueue.handle(event):
+        return
+
+    msg = get_msg(event)
+    if msg == '/guess':
+        Guess(event)
+    else:
+        reply_text(event, 'command not defined')
