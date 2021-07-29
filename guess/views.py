@@ -28,4 +28,4 @@ def route(event):
     if msg == 'guess':
         Guess(event)
     else:
-        reply_text(event, 'command not defined')
+        reply_text(event, 'input \'guess\' to play the game!')

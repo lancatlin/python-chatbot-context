@@ -29,9 +29,9 @@ class Guess(TestCase):
         send('100')
         mock_reply.assert_called_with(f'Guess a number between 10 to 100')
         send('34')
-        mock_reply.assert_called_with('too small')
+        mock_reply.assert_called_with('Too small')
         send('72')
-        mock_reply.assert_called_with('too large')
+        mock_reply.assert_called_with('Too large')
         send('63')
         mock_reply.assert_called_with(
             f'You spent 3 times to guess the secret number.')
