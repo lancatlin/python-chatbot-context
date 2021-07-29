@@ -22,7 +22,7 @@ class Guess(TestCase):
     @patch('guess.guess.randint', return_value=63)
     @patch('guess.guess.Guess.reply')
     def test_guess(self, mock_reply, mock_random):
-        send('/guess')
+        send('guess')
         mock_reply.assert_called_with('From what number?')
         send('10')
         mock_reply.assert_called_with('To what number?')

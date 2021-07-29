@@ -25,7 +25,7 @@ def route(event):
         return
 
     msg = get_msg(event)
-    if msg == '/guess':
+    if msg == 'guess':
         Guess(event)
     else:
         reply_text(event, 'command not defined')
